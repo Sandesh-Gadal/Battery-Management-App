@@ -1,0 +1,131 @@
+package com.example.batterymanagementapp;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.app.Dialog;
+import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import androidx.exifinterface.media.ExifInterface;
+import java.io.IOException;
+
+
+
+import java.util.List;
+
+public class CustomerDetailsActivity extends AppCompatActivity {
+
+    private TextView customerInfo;
+    private RecyclerView recyclerViewImages;
+    private DatabaseHelper dbHelper;
+    private int customerId;
+    private TextView tvName, tvCompany, tvVehicle, tvBattery, tvQuantity, tvComingDate, tvOutgoingDate;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_customer_details);
+
+        customerId = getIntent().getIntExtra("customerId", -1);
+
+        tvName = findViewById(R.id.tvName);
+        tvCompany = findViewById(R.id.tvCompany);
+        tvVehicle = findViewById(R.id.tvVehicle);
+        tvBattery = findViewById(R.id.tvBattery);
+        tvQuantity = findViewById(R.id.tvQuantity);
+        tvComingDate = findViewById(R.id.tvComingDate);
+        tvOutgoingDate = findViewById(R.id.tvOutgoingDate);
+
+
+        recyclerViewImages = findViewById(R.id.recyclerViewImages);
+        recyclerViewImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        dbHelper = new DatabaseHelper(this);
+
+        loadCustomerDetails();
+    }
+
+    private void loadCustomerDetails() {
+        Customer customer = dbHelper.getCustomerById(String.valueOf(customerId));
+        if (customer != null) {
+            tvName.setText(customer.getCustomerName());
+            tvCompany.setText(customer.getCompanyName());
+            tvVehicle.setText(customer.getVehicleNo());
+            tvBattery.setText(customer.getBatteryModel());
+            tvQuantity.setText(String.valueOf(customer.getBatteryQuantity()));
+            tvComingDate.setText(customer.getComingDate());
+            tvOutgoingDate.setText(customer.getOutgoingDate() != null ? customer.getOutgoingDate() : "-");
+
+            List<String> images = dbHelper.getCustomerImages(customerId);
+            Log.d("image", String.valueOf(images));
+            ImageAdapter imageAdapter = new ImageAdapter(this, images);
+            recyclerViewImages.setAdapter(imageAdapter);
+        }
+    }
+
+
+    public void showImagePreview(String path) {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_image_preview);
+
+        ImageView fullImage = dialog.findViewById(R.id.fullImage);
+        ImageButton btnClose = dialog.findViewById(R.id.btnClose);
+
+        // Load image
+        // Load with rotation fix
+        Bitmap bitmap = getCorrectlyOrientedBitmap(path);
+        fullImage.setImageBitmap(bitmap);
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+
+    private Bitmap getCorrectlyOrientedBitmap(String path) {
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+
+        try {
+            ExifInterface exif = new ExifInterface(path);
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED
+            );
+
+            Matrix matrix = new Matrix();
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    break;
+                default:
+                    return bitmap;
+            }
+            return Bitmap.createBitmap(bitmap, 0, 0,
+                    bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+
+}

@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Customer Info in Table Format -->
+    <TableLayout
+        android:id="@+id/customerInfoTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+
+        android:layout_marginBottom="16dp">
+
+        <TableRow>
+            <TextView
+                android:text="Name:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvName"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Company:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvCompany"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Vehicle:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvVehicle"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Battery:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvBattery"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Quantity:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Coming Date:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvComingDate"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Outgoing Date:"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvOutgoingDate"
+                android:padding="4dp"/>
+        </TableRow>
+    </TableLayout>
+
+    <!-- Recycler for Images -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewImages"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"/>
+</LinearLayout>

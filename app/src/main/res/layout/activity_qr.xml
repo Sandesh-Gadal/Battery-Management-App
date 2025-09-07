@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/qrImage"
+        android:layout_width="400dp"
+        android:layout_height="400dp"/>
+    <TextView
+        android:id="@+id/tvcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:padding="8dp" />
+    <TextView
+        android:id="@+id/businessInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="कालिका ब्याट्री तथा वायरिङ मर्मत केन्द्र"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:padding="8dp" />
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="भरतपुर ५, टर्मिनल बसपार्क, चितवन"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+
+        android:padding="8dp" />
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9821275659, 9865159540"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back to Main"
+        android:backgroundTint="#6200EE"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:padding="8dp" />
+</LinearLayout>
