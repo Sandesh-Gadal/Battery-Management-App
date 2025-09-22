@@ -37,7 +37,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_details);
 
         customerId = getIntent().getIntExtra("customerId", -1);
-
+Log.d("id",""+customerId);
         tvName = findViewById(R.id.tvName);
         tvCompany = findViewById(R.id.tvCompany);
         tvVehicle = findViewById(R.id.tvVehicle);
@@ -52,10 +52,12 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        loadCustomerDetails();
+        loadCustomerDetails(customerId);
     }
 
-    private void loadCustomerDetails() {
+    private void loadCustomerDetails(int customerId) {
+        Log.d("id","lcd"+customerId);
+
         Customer customer = dbHelper.getCustomerById(String.valueOf(customerId));
         if (customer != null) {
             tvName.setText(customer.getCustomerName());
@@ -71,6 +73,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             ImageAdapter imageAdapter = new ImageAdapter(this, images);
             recyclerViewImages.setAdapter(imageAdapter);
         }
+        Log.d("id", String.valueOf(customer));
     }
 
 

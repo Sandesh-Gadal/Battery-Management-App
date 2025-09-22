@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,10 +119,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Customer getCustomerById(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
+        Log.d("id","dbh "+id);
 
         Cursor cursor = db.query(TABLE_NAME,
                 null,
-                COLUMN_UNIQUE_CODE + "=?",
+                COLUMN_ID + "=?",
                 new String[]{id},
                 null, null, null);
 

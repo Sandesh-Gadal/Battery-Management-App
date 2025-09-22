@@ -37,18 +37,7 @@
 
         <TableRow>
             <TextView
-                android:text="Vehicle:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvVehicle"
-                android:padding="4dp"/>
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:text="Battery:"
+                android:text="Contact:"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:padding="4dp"/>
@@ -56,6 +45,10 @@
                 android:id="@+id/tvBattery"
                 android:padding="4dp"/>
         </TableRow>
+
+
+
+
 
         <TableRow>
             <TextView
@@ -65,6 +58,17 @@
                 android:padding="4dp"/>
             <TextView
                 android:id="@+id/tvQuantity"
+                android:padding="4dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Ampere:"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="4dp"/>
+            <TextView
+                android:id="@+id/tvVehicle"
                 android:padding="4dp"/>
         </TableRow>
 

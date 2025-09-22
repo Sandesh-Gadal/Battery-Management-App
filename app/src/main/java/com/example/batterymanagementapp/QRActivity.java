@@ -25,7 +25,7 @@ public class QRActivity extends AppCompatActivity {
         Button backbtn = findViewById(R.id.backButton);
 //        long customerId = getIntent().getLongExtra("customer_id", -1L);
         String uniqueCode = getIntent().getStringExtra("unique_code");
-        tvcode.setText("Code: "+ uniqueCode);
+        tvcode.setText("Token: "+ uniqueCode);
 backbtn.setOnClickListener(v->{
     Intent intent = new Intent (this , MainActivity.class);
     startActivity(intent);

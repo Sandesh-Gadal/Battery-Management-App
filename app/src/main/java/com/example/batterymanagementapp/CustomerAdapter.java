@@ -58,7 +58,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Customer c = customerList.get(position);
         holder.nameText.setText(c.getCustomerName() + " (" + c.getCompanyName() + ")");
-        holder.vehicleText.setText("Vehicle: " + c.getVehicleNo());
+        holder.vehicleText.setText("Ampere: " + c.getVehicleNo());
         holder.statusText.setText(c.getOutgoingDate() == null ? "Status: Active" : "Taken on " + c.getOutgoingDate());
         // Open CustomerDetailsActivity
         holder.showDetails.setOnClickListener(v -> {
