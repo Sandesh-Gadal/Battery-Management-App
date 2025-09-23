@@ -13,13 +13,15 @@ public class Customer {
     private String comingDate;
     private String outgoingDate;
     private String uniqueCode; // 6-char alphanumeric
-
-
     private List<String> imagePaths = new ArrayList<>();
 
+    // runtime only
+    private boolean active;
+
+    // ✅ Constructor with uniqueCode
     public Customer(String customerName, String companyName, String vehicleNo,
                     String batteryModel, int batteryQuantity, String comingDate,
-                    String outgoingDate) {
+                    String outgoingDate, String uniqueCode) {
         this.customerName = customerName;
         this.companyName = companyName;
         this.vehicleNo = vehicleNo;
@@ -27,9 +29,22 @@ public class Customer {
         this.batteryQuantity = batteryQuantity;
         this.comingDate = comingDate;
         this.outgoingDate = outgoingDate;
+        this.uniqueCode = uniqueCode;
+        // mark as active if no outgoing date yet
+        this.active = (outgoingDate == null || outgoingDate.isEmpty());
     }
 
+    // ✅ Active getter
+    public boolean isActive() {
+        return active;
+    }
 
+    // ✅ Setter in case you want to toggle it manually
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    // Getters & Setters
     public String getUniqueCode() {
         return uniqueCode;
     }
@@ -37,6 +52,7 @@ public class Customer {
     public void setUniqueCode(String uniqueCode) {
         this.uniqueCode = uniqueCode;
     }
+
     public List<String> getImagePaths() {
         return imagePaths;
     }

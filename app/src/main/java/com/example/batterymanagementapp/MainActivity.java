@@ -83,33 +83,39 @@ public class MainActivity extends AppCompatActivity {
                         batteryModel.getText().toString(),
                         Integer.parseInt(batteryQuantity.getText().toString()),
                         comingDate.getText().toString(),
-                        null
+                        null,
+                        null // uniqueCode will be generated in DB
                 );
 
-                long insertedId = dbHelper.addCustomer(customer);
+                Customer insertedCustomer = dbHelper.addCustomer(customer);
 
-                if (insertedId != -1) {
-                    currentCustomerId = (int) insertedId; // ✅ Set the currentCustomerId here
+                if (insertedCustomer.getId() != -1) {
+                    currentCustomerId = insertedCustomer.getId(); // ✅ now correct
 
-                    // Save images to DB now
+                    // Save images
                     for (String path : imagePaths) {
                         dbHelper.addCustomerImage(currentCustomerId, path);
                     }
-                    logCustomerWithImages(customer);
-                    Intent intent = new Intent(MainActivity.this, QRActivity.class);
-                    intent.putExtra("customer_id", insertedId);
-                    intent.putExtra("unique_code", customer.getUniqueCode());
 
+                    logCustomerWithImages(insertedCustomer);
+
+                    // ✅ Pass both ID & unique code to QRActivity
+                    Intent intent = new Intent(MainActivity.this, QRActivity.class);
+                    intent.putExtra("customer_id", insertedCustomer.getId());
+                    intent.putExtra("unique_code", insertedCustomer.getUniqueCode());
                     startActivity(intent);
+
                     clearInputs();
-                    imagePaths.clear(); // Clear temp images for next customer
+                    imagePaths.clear();
                     imageAdapter.notifyDataSetChanged();
+
                     Toast.makeText(this, "Customer added successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Failed to add customer", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
 
 //        searchView = findViewById(R.id.searchView);
 
@@ -175,10 +181,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean validateInputs() {
         if (customerName.getText().toString().isEmpty() ||
-                companyName.getText().toString().isEmpty() ||
-                vehicleNo.getText().toString().isEmpty() ||
-                batteryModel.getText().toString().isEmpty() ||
-                batteryQuantity.getText().toString().isEmpty() ||
                 comingDate.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return false;

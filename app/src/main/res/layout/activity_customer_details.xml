@@ -1,103 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="0dp">
 
-    <!-- Customer Info in Table Format -->
-    <TableLayout
-        android:id="@+id/customerInfoTable"
+    <!-- Header with Back Button -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="1"
+        android:background="@color/purple_500"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:elevation="4dp">
 
-        android:layout_marginBottom="16dp">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_close"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/white"
+            android:scaleType="centerInside"
+            android:layout_centerVertical="true" />
 
-        <TableRow>
-            <TextView
-                android:text="Name:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvName"
-                android:padding="4dp"/>
-        </TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Customer Details"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true" />
 
-        <TableRow>
-            <TextView
-                android:text="Company:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvCompany"
-                android:padding="4dp"/>
-        </TableRow>
+    </RelativeLayout>
 
-        <TableRow>
-            <TextView
-                android:text="Contact:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvBattery"
-                android:padding="4dp"/>
-        </TableRow>
-
-
-
-
-
-        <TableRow>
-            <TextView
-                android:text="Quantity:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvQuantity"
-                android:padding="4dp"/>
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:text="Ampere:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvVehicle"
-                android:padding="4dp"/>
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:text="Coming Date:"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvComingDate"
-                android:padding="4dp"/>
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:text="Outgoing Date:"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:padding="4dp"/>
-            <TextView
-                android:id="@+id/tvOutgoingDate"
-                android:padding="4dp"/>
-        </TableRow>
-    </TableLayout>
-
-    <!-- Recycler for Images -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewImages"
+    <!-- Scrollable Content -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="120dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Customer Info Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="8dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@color/white">
+
+                <TableLayout
+                    android:id="@+id/customerInfoTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1"
+                    android:padding="16dp">
+
+                    <TableRow
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:text="Name:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Company:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvCompany"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Contact:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvBattery"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+
+                        <!-- Call Button fixed at bottom center -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Call"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            style="@style/Widget.MaterialComponents.Button"
+                            app:cornerRadius="50dp"
+                            android:drawableLeft="@android:drawable/ic_menu_call"/>
+
+
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Quantity:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvQuantity"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Ampere:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvVehicle"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Coming Date:"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvComingDate"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200"
+                        android:layout_marginVertical="4dp" />
+
+                    <TableRow
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Outgoing Date:"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvOutgoingDate"
+                            android:textSize="16sp"
+                            android:padding="4dp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center_vertical" />
+                    </TableRow>
+
+                </TableLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Images Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Images"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <!-- Recycler for Images -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:padding="8dp" />
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

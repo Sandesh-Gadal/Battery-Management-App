@@ -1,9 +1,15 @@
 package com.example.batterymanagementapp;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.BinderThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +22,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import androidx.exifinterface.media.ExifInterface;
+
+import com.google.android.material.button.MaterialButton;
+
 import java.io.IOException;
 
 
@@ -27,7 +36,11 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     private TextView customerInfo;
     private RecyclerView recyclerViewImages;
     private DatabaseHelper dbHelper;
-    private int customerId;
+    private String ucode;
+
+
+
+    private ImageButton closeBtn;
     private TextView tvName, tvCompany, tvVehicle, tvBattery, tvQuantity, tvComingDate, tvOutgoingDate;
 
 
@@ -36,8 +49,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_details);
 
-        customerId = getIntent().getIntExtra("customerId", -1);
-Log.d("id",""+customerId);
+        ucode =getIntent().getStringExtra("customerId");
+//        Log.d("id",""+ucode);
         tvName = findViewById(R.id.tvName);
         tvCompany = findViewById(R.id.tvCompany);
         tvVehicle = findViewById(R.id.tvVehicle);
@@ -46,19 +59,44 @@ Log.d("id",""+customerId);
         tvComingDate = findViewById(R.id.tvComingDate);
         tvOutgoingDate = findViewById(R.id.tvOutgoingDate);
 
+        closeBtn =findViewById(R.id.btnBack);
+
+        closeBtn.setOnClickListener(v->{
+            Intent intent = new Intent(this , CustomerListActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        MaterialButton btnCall = findViewById(R.id.btnCall);
+        btnCall.setOnClickListener(v -> {
+            String phone = tvBattery.getText().toString().trim(); // or use correct field
+            Log.d("phonenumber:", phone);
+
+            if (!phone.isEmpty()) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phone));
+                if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(intent);
+                } else {
+                    // Request permission at runtime
+                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
+                }
+            }
+        });
+
 
         recyclerViewImages = findViewById(R.id.recyclerViewImages);
         recyclerViewImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         dbHelper = new DatabaseHelper(this);
 
-        loadCustomerDetails(customerId);
+        loadCustomerDetails(ucode);
     }
 
-    private void loadCustomerDetails(int customerId) {
-        Log.d("id","lcd"+customerId);
+    private void loadCustomerDetails(String ucode) {
+//        Log.d("id","lcd"+ucode);
 
-        Customer customer = dbHelper.getCustomerById(String.valueOf(customerId));
+        Customer customer = dbHelper.getCustomerById(ucode);
         if (customer != null) {
             tvName.setText(customer.getCustomerName());
             tvCompany.setText(customer.getCompanyName());
@@ -68,12 +106,12 @@ Log.d("id",""+customerId);
             tvComingDate.setText(customer.getComingDate());
             tvOutgoingDate.setText(customer.getOutgoingDate() != null ? customer.getOutgoingDate() : "-");
 
-            List<String> images = dbHelper.getCustomerImages(customerId);
+            List<String> images = dbHelper.getCustomerImages(customer.getId());
             Log.d("image", String.valueOf(images));
             ImageAdapter imageAdapter = new ImageAdapter(this, images);
             recyclerViewImages.setAdapter(imageAdapter);
         }
-        Log.d("id", String.valueOf(customer));
+//        Log.d("id", String.valueOf(customer));
     }
 
 

@@ -26,10 +26,10 @@ public class QRActivity extends AppCompatActivity {
 //        long customerId = getIntent().getLongExtra("customer_id", -1L);
         String uniqueCode = getIntent().getStringExtra("unique_code");
         tvcode.setText("Token: "+ uniqueCode);
-backbtn.setOnClickListener(v->{
-    Intent intent = new Intent (this , MainActivity.class);
-    startActivity(intent);
-});
+        backbtn.setOnClickListener(v->{
+            Intent intent = new Intent (this , MainActivity.class);
+            startActivity(intent);
+        });
 
         if (uniqueCode == null) {
             finish();

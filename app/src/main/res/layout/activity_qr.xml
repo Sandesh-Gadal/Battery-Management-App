@@ -4,27 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="1dp">
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/kalikalogofinal"
+        android:contentDescription="Logo"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:paddingBottom="16dp" />
+
 
     <ImageView
         android:id="@+id/qrImage"
-        android:layout_width="400dp"
-        android:layout_height="400dp"/>
+        android:layout_width="300dp"
+        android:layout_height="300dp"/>
     <TextView
         android:id="@+id/tvcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:padding="8dp" />
+        android:padding="3dp" />
     <TextView
         android:id="@+id/businessInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="कालिका ब्याट्री तथा वायरिङ मर्मत केन्द्र"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:gravity="center"
@@ -39,7 +51,7 @@
         android:gravity="center"
         android:textStyle="bold"
 
-        android:padding="8dp" />
+        android:padding="3dp" />
     <TextView
 
         android:layout_width="wrap_content"
@@ -50,7 +62,7 @@
 
         android:textColor="@color/black"
         android:gravity="center"
-        android:padding="8dp" />
+        android:padding="3dp" />
 
     <Button
         android:id="@+id/backButton"
@@ -60,5 +72,5 @@
         android:backgroundTint="#6200EE"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:padding="8dp" />
+        android:padding="3dp" />
 </LinearLayout>

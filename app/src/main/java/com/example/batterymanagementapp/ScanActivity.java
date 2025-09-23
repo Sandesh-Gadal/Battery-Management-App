@@ -97,9 +97,10 @@ public class ScanActivity extends AppCompatActivity {
         if (customer != null) {
             String info = "Name: " + customer.getCustomerName() + "\n" +
                     "Company: " + customer.getCompanyName() + "\n" +
-                    "Vehicle No: " + customer.getVehicleNo() + "\n" +
-                    "Battery Model: " + customer.getBatteryModel() + "\n" +
+                    "Ampere: " + customer.getVehicleNo() + "\n" +
+                    "Contact No: " + customer.getBatteryModel() + "\n" +
                     "Quantity: " + customer.getBatteryQuantity() + "\n" +
+                    "Token: " + customer.getUniqueCode()  + "\n" +
                     "Coming Date: " + customer.getComingDate();
 
             customerInfo.setText(info);
@@ -110,12 +111,21 @@ public class ScanActivity extends AppCompatActivity {
             } else {
                 takeAwayButton.setEnabled(true);
                 takeAwayButton.setOnClickListener(v -> {
-                    String outgoingDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                    if (dbHelper.updateOutgoingDate(scannedCode, outgoingDate)) {
-                        customerInfo.append("\nOutgoing Date: " + outgoingDate);
-                        takeAwayButton.setEnabled(false);
-                        Toast.makeText(this, "Outgoing date recorded", Toast.LENGTH_SHORT).show();
-                    }
+                    new androidx.appcompat.app.AlertDialog.Builder(this)
+                            .setTitle("Confirm Action")
+                            .setMessage("Are you sure you want to record the outgoing date?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                String outgoingDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                                if (dbHelper.updateOutgoingDate(scannedCode, outgoingDate)) {
+                                    customerInfo.append("\nOutgoing Date: " + outgoingDate);
+                                    takeAwayButton.setEnabled(false); // disable after recording
+                                    Toast.makeText(this, "Outgoing date recorded", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("No", (dialog, which) -> {
+                                dialog.dismiss(); // just close dialog
+                            })
+                            .show();
                 });
             }
         } else {

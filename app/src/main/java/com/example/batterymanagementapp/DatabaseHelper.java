@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BatteryDB.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String TABLE_NAME = "customers";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_CUSTOMER_NAME = "customer_name";
@@ -75,11 +75,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Fetch all images of a customer
-    public List<String> getCustomerImages(int customerId) {
+    public List<String> getCustomerImages(int cus_id) {
         List<String> images = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT image_path FROM customer_images WHERE customer_id=?",
-                new String[]{String.valueOf(customerId)});
+                new String[]{String.valueOf(cus_id)});
         if (cursor.moveToFirst()) {
             do {
                 images.add(cursor.getString(cursor.getColumnIndexOrThrow("image_path")));
@@ -96,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_CUSTOMER_NAME, customer.getCustomerName());
@@ -105,25 +105,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_BATTERY_MODEL, customer.getBatteryModel());
         values.put(COLUMN_BATTERY_QUANTITY, customer.getBatteryQuantity());
         values.put(COLUMN_COMING_DATE, customer.getComingDate());
+        values.put(COLUMN_OUTGOING_DATE, customer.getOutgoingDate());
 
-        // generate and save unique code
-        String uniqueCode = generateUniqueCode(6);
+        // ✅ Use existing code or generate new one
+        String uniqueCode = (customer.getUniqueCode() == null || customer.getUniqueCode().isEmpty())
+                ? generateUniqueCode(6)
+                : customer.getUniqueCode();
+
         values.put(COLUMN_UNIQUE_CODE, uniqueCode);
+
         long insertedId = db.insert(TABLE_NAME, null, values);
-        customer.setId((int) insertedId);  // ✅ Set the ID back
-        customer.setUniqueCode(uniqueCode); // keep in object
+
+        customer.setId((int) insertedId);
+        customer.setUniqueCode(uniqueCode);
+
         db.close();
-        return insertedId; // Return the generated row ID (used in QR)
+        return customer;  // not long anymore
     }
+
 
 
     public Customer getCustomerById(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Log.d("id","dbh "+id);
+//        Log.d("id","dbh "+id);
 
         Cursor cursor = db.query(TABLE_NAME,
                 null,
-                COLUMN_ID + "=?",
+                COLUMN_UNIQUE_CODE + "=?",
                 new String[]{id},
                 null, null, null);
 
@@ -135,13 +143,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_MODEL)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_QUANTITY)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMING_DATE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE))
-
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIQUE_CODE)) // ✅ added
             );
             customer.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
             cursor.close();
             return customer;
         }
+
 
         if (cursor != null) cursor.close();
         return null;
@@ -153,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_OUTGOING_DATE, outgoingDate);
 
-        int result = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{id});
+        int result = db.update(TABLE_NAME, values, COLUMN_UNIQUE_CODE + "=?", new String[]{id});
         db.close();
         return result > 0;
     }
@@ -172,7 +181,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_MODEL)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_QUANTITY)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMING_DATE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE))
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIQUE_CODE)) // ✅ added
                 );
                 customer.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
                 list.add(customer);
@@ -199,7 +209,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_MODEL)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_QUANTITY)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMING_DATE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE))
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIQUE_CODE)) // ✅ added
                 );
                 customer.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
                 customers.add(customer);
