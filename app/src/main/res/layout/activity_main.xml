@@ -1,170 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="@android:color/white">
 
-<!--    <androidx.appcompat.widget.SearchView-->
-<!--        android:id="@+id/searchView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:queryHint="Search by name or address"-->
-<!--        android:background="@drawable/search_view_background"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:textSize="18sp"-->
-<!--        app:iconifiedByDefault="false"-->
-<!--        app:queryBackground="@android:color/transparent" />-->
-
-    <LinearLayout
+    <!-- Content should scroll -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/scanButton"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Scan QR Code"
-            android:backgroundTint="#6200EE"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:padding="14dp"
-            android:layout_marginRight="16sp"
-            android:elevation="2dp"
-            />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/viewCustomersButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View All Customers"
-            android:backgroundTint="#6200EE"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:padding="14dp"
-            android:elevation="2dp"
-           />
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/customerName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Customer Name"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
-
-    <EditText
-        android:id="@+id/companyName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Company Name"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
-
-
-
-    <EditText
-        android:id="@+id/batteryModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contact number"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:inputType="number"
-        android:layout_marginBottom="12dp"/>
-
-    <EditText
-        android:id="@+id/batteryQuantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Battery Quantity"
-        android:inputType="number"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
-
-    <EditText
-        android:id="@+id/vehicleNo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Battery Ampere"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"/>
-
-    <EditText
-        android:id="@+id/comingDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Coming Date"
-        android:padding="14dp"
-        android:background="@drawable/edit_text_background"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- Image Upload Section -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Images"
-        android:textSize="20sp"
-        android:textColor="#6200EE"
-        android:layout_marginBottom="12dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
-
-        <Button
-            android:id="@+id/addImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Image"
-            android:backgroundTint="#6200EE"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:paddingHorizontal="18dp"
-            android:paddingVertical="12dp"
-            android:elevation="2dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/imageContainer"
+            <!-- Header -->
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_500"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:elevation="4dp">
+
+                <TextView
+                    android:id="@+id/headerText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Battery"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <!-- Form Fields -->
+            <EditText
+                android:id="@+id/customerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer Name"
+                android:padding="14dp"
+                android:background="@drawable/edit_text_background"
+                android:textSize="18sp"
+                android:layout_margin="16dp"
+                android:singleLine="true"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/companyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Company Name"
+                android:padding="14dp"
+                android:singleLine="true"
+                android:background="@drawable/edit_text_background"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/scroll_view_background"/>
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/edit_text_background"
+                android:padding="0dp">
 
-    </LinearLayout>
+                <!-- Country code -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="+977"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
 
-    <Button
-        android:id="@+id/submitButton"
+                <!-- Separator -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#CCCCCC"/>
+
+                <!-- Number input -->
+                <EditText
+                    android:id="@+id/batteryModel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Phone number"
+                    android:inputType="phone"
+                    android:padding="12dp"
+                    android:singleLine="true"
+                    android:textSize="18sp"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/batteryQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Battery Quantity"
+                android:inputType="number"
+                android:padding="14dp"
+                android:background="@drawable/edit_text_background"
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/vehicleNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Battery Ampere"
+                android:padding="14dp"
+                android:background="@drawable/edit_text_background"
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/comingDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Coming Date"
+                android:padding="14dp"
+                android:singleLine="true"
+                android:enabled="false"
+                android:background="@drawable/edit_text_background"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Image Upload Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Images"
+                android:textSize="20sp"
+                android:textColor="#6200EE"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/addImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Image"
+                    android:backgroundTint="#6200EE"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="12dp"
+                    android:elevation="2dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/imageContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/scroll_view_background"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Submit and Generate QR"
+                android:backgroundTint="#6200EE"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:padding="14dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="12dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Menu -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit and Generate QR"
-        android:backgroundTint="#6200EE"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-
-        android:padding="14dp"
-        android:elevation="2dp"
-        android:layout_marginBottom="12dp"/>
-
-
-
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@color/selector_nav_item"
+        app:itemTextColor="@color/selector_nav_item"
+        android:padding="16dp"
+        app:menu="@menu/menu_main"/>
+</RelativeLayout>

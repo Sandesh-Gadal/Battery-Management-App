@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.batterymanagementapp.Customer;
@@ -24,7 +25,7 @@ import java.util.List;
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHolder> {
     private List<Customer> customerList;
     private Context context;
-    private Activity activity;
+    private Activity activity ;
 
 
 
@@ -37,7 +38,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText, vehicleText, statusText;
-        ImageButton showDetails , showQR;
+        ImageButton showDetails , showQR , deleteBtn , editBtn;
 
         public ViewHolder(View view) {
             super(view);
@@ -46,6 +47,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             statusText = view.findViewById(R.id.statusText);
             showDetails = view.findViewById(R.id.viewButton);
             showQR = view.findViewById(R.id.qrButton);
+            deleteBtn=view.findViewById(R.id.deleteButton);
+            editBtn=view.findViewById(R.id.editButton);
         }
     }
 
@@ -62,7 +65,22 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
         Customer c = customerList.get(position);
         holder.nameText.setText(c.getCustomerName() + " (" + c.getCompanyName() + ")");
         holder.vehicleText.setText("Ampere: " + c.getVehicleNo());
-        holder.statusText.setText(c.getOutgoingDate() == null ? "Status: Active" : "Taken on " + c.getOutgoingDate());
+//        holder.statusText.setText(c.getOutgoingDate() == null ? "Status: Active" : "Taken on " + c.getOutgoingDate());
+        if (c.getOutgoingDate() == null) {
+            holder.statusText.setText("Status: Active");
+            holder.statusText.setBackgroundResource(R.drawable.status_background);
+            holder.statusText.getBackground().setTint(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.green)
+            );
+        } else {
+            holder.statusText.setText("Status: Taken");
+            holder.statusText.setBackgroundResource(R.drawable.status_background);
+            holder.statusText.getBackground().setTint(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.red)
+            );
+        }
+
+
         // Open CustomerDetailsActivity
         holder.showDetails.setOnClickListener(v -> {
 //            Log.d("id111:","454545:    "+c.getUniqueCode());
@@ -73,12 +91,41 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             activity.startActivity(intent);
         });
 
-       holder.showQR.setOnClickListener(v->{
+        holder.editBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(activity , MainActivity.class);
+            intent.putExtra("isEdit", true);
+            intent.putExtra("unique_code",c.getUniqueCode());
+            intent.putExtra("customerId", c.getId()); // pass DB id
+            activity.startActivity(intent);
+        });
+
+
+        holder.showQR.setOnClickListener(v->{
            Intent intent = new Intent(activity , QRActivity.class);
 //           Log.d("ucode",c.getUniqueCode());
            intent.putExtra("unique_code",c.getUniqueCode());
            activity.startActivity(intent);
        });
+
+        holder.deleteBtn.setOnClickListener(v -> {
+            // Show confirmation dialog
+            new androidx.appcompat.app.AlertDialog.Builder(activity)
+                    .setTitle("Delete Customer")
+                    .setMessage("Are you sure you want to delete this customer?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Delete customer from DB
+                        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+                        dbHelper.deleteCustomer(c.getId());
+
+                        // Remove from list and update RecyclerView
+                        customerList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, customerList.size());
+                    })
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
     }
 
     @Override

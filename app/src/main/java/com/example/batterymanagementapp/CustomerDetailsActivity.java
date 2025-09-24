@@ -107,7 +107,8 @@ public class CustomerDetailsActivity extends AppCompatActivity {
             tvOutgoingDate.setText(customer.getOutgoingDate() != null ? customer.getOutgoingDate() : "-");
 
             List<String> images = dbHelper.getCustomerImages(customer.getId());
-            Log.d("image", String.valueOf(images));
+//            Log.d("image", String.valueOf(images));
+//            Log.d("image","sss"+tvBattery);
             ImageAdapter imageAdapter = new ImageAdapter(this, images);
             recyclerViewImages.setAdapter(imageAdapter);
         }
@@ -121,7 +122,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_image_preview);
 
         ImageView fullImage = dialog.findViewById(R.id.fullImage);
-        ImageButton btnClose = dialog.findViewById(R.id.btnClose);
+        ImageButton btnClose = dialog.findViewById(R.id.btnBack);
 
         // Load image
         // Load with rotation fix

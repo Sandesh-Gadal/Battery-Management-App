@@ -1,9 +1,11 @@
 package com.example.batterymanagementapp;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,14 @@ public class CustomerListActivity extends AppCompatActivity {
         adapter = new CustomerAdapter(this, filteredList, getApplicationContext());
         recyclerView.setAdapter(adapter);
 
+        ImageButton closeBtn =findViewById(R.id.btnBack);
+
+        closeBtn.setOnClickListener(v->{
+            Intent intent = new Intent(this , MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
         // Setup filter chips
         filterChipGroup = findViewById(R.id.filterChipGroup);
         setupChipFilters();
@@ -55,7 +65,7 @@ public class CustomerListActivity extends AppCompatActivity {
         filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             filteredList.clear();
 
-            if (checkedId == -1) {
+            if (checkedId == R.id.chipAll) {
                 filteredList.addAll(allCustomers);
             } else {
                 for (Customer c : allCustomers) {

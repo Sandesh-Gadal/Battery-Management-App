@@ -37,7 +37,6 @@
             android:layout_marginTop="6dp"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
-            android:background="@drawable/status_background"
             android:textColor="@android:color/white"
             android:text="Active"/>
     </LinearLayout>

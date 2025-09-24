@@ -9,12 +9,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView; // Updated import
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private File currentPhotoFile;
 
+    private TextView headerText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         batteryQuantity = findViewById(R.id.batteryQuantity);
         comingDate = findViewById(R.id.comingDate);
         Button submitButton = findViewById(R.id.submitButton);
-        Button scanButton = findViewById(R.id.scanButton);
+//        Button scanButton = findViewById(R.id.action_scan);
 
         imageRecycler = findViewById(R.id.imageContainer);
         imageAdapter = new ImageAdapter(this, imagePaths);
@@ -71,8 +76,38 @@ public class MainActivity extends AppCompatActivity {
         addImageBtn.setOnClickListener(v -> openCamera());
 
         // Set current date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm a", Locale.getDefault());
         comingDate.setText(sdf.format(new Date()));
+
+        headerText = findViewById(R.id.headerText);
+        boolean isEdit = getIntent().getBooleanExtra("isEdit", false);
+        int customerId = getIntent().getIntExtra("customerId", -1);
+        String ucode = getIntent().getStringExtra("unique_code");
+
+        if (isEdit && customerId != -1) {
+            headerText.setText("Edit Details");
+            submitButton.setText("Update");
+
+            // Fetch customer from DB
+            Customer existingCustomer = dbHelper.getCustomerById(ucode);
+            if (existingCustomer != null) {
+                customerName.setText(existingCustomer.getCustomerName());
+                companyName.setText(existingCustomer.getCompanyName());
+                vehicleNo.setText(existingCustomer.getVehicleNo());
+                batteryModel.setText(existingCustomer.getBatteryModel());
+                batteryQuantity.setText(String.valueOf(existingCustomer.getBatteryQuantity()));
+                comingDate.setText(existingCustomer.getComingDate());
+
+                // Load saved images
+                List<String> savedImages = dbHelper.getCustomerImages(customerId);
+                imagePaths.clear();
+                imagePaths.addAll(savedImages);
+                imageAdapter.notifyDataSetChanged();
+
+                // store for later update
+                currentCustomerId = customerId;
+            }
+        }
 
         submitButton.setOnClickListener(v -> {
             if (validateInputs()) {
@@ -132,13 +167,28 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        scanButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, ScanActivity.class));
+//        scanButton.setOnClickListener(v -> {
+//            startActivity(new Intent(MainActivity.this, ScanActivity.class));
+//        });
+//        Button viewCustomersButton = findViewById(R.id.action_view_customers);
+//        viewCustomersButton.setOnClickListener(v -> {
+//            startActivity(new Intent(MainActivity.this, CustomerListActivity.class));
+//        });
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.action_scan) {
+                startActivity(new Intent(MainActivity.this, ScanActivity.class));
+                return true;
+            } else if (id == R.id.action_view_customers) {
+                startActivity(new Intent(MainActivity.this, CustomerListActivity.class));
+                return true;
+            }
+            return false;
         });
-        Button viewCustomersButton = findViewById(R.id.viewCustomersButton);
-        viewCustomersButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, CustomerListActivity.class));
-        });
+
+
     }
 
     private void filterCustomers(String text) {
@@ -180,13 +230,39 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean validateInputs() {
-        if (customerName.getText().toString().isEmpty() ||
-                comingDate.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return false;
+        String name = customerName.getText().toString().trim();
+        String phone = batteryModel.getText().toString().trim();
+
+        boolean valid = true;
+
+        if (name.isEmpty()) {
+            customerName.setError("Please enter customer name");
+            valid = false;
+        } else {
+            customerName.setError(null);
         }
-        return true;
+
+        if (phone.isEmpty()) {
+            batteryModel.setError("Please enter phone number");
+            valid = false;
+        } else if (phone.length() != 10) {
+            batteryModel.setError("Phone number must be exactly 10 digits");
+            valid = false;
+        } else {
+            batteryModel.setError(null);
+        }
+
+        if (comingDate.getText().toString().trim().isEmpty()) {
+            comingDate.setError("Date cannot be empty");
+            valid = false;
+        } else {
+            comingDate.setError(null);
+        }
+
+        return valid;
     }
+
+
 
     private int getLastInsertedId() {
         return (int) dbHelper.getWritableDatabase().compileStatement(

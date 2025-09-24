@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_scan"
+        android:title="Scan QR"
+        android:icon="@drawable/ic_qr_code"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_view_customers"
+        android:title="View Customers"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -220,6 +220,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return customers;
     }
 
+    public void deleteCustomer(int customerId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete images first
+        db.delete("customer_images", "customer_id=?", new String[]{String.valueOf(customerId)});
+
+        // Delete customer
+        db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(customerId)});
+
+        db.close();
+    }
+
+
 
 
 }
