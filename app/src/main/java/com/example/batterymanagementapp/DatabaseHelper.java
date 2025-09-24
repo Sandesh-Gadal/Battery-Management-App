@@ -123,7 +123,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return customer;  // not long anymore
     }
 
-
+    public void deleteImagesForCustomer(int customerId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("customer_images", "customer_id=?", new String[]{String.valueOf(customerId)});
+    }
 
     public Customer getCustomerById(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -197,8 +200,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME +
-                        " WHERE " + COLUMN_CUSTOMER_NAME + " LIKE ? OR " + COLUMN_ID + " LIKE ?",
-                new String[]{"%" + keyword + "%", "%" + keyword + "%"});
+                        " WHERE " + COLUMN_CUSTOMER_NAME + " LIKE ? " +
+                        " OR " + COLUMN_COMPANY_NAME + " LIKE ? " +
+                        " OR " + COLUMN_UNIQUE_CODE + " LIKE ?",
+                new String[]{"%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%"});
 
         if (cursor.moveToFirst()) {
             do {
@@ -210,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BATTERY_QUANTITY)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMING_DATE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OUTGOING_DATE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIQUE_CODE)) // ✅ added
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIQUE_CODE))
                 );
                 customer.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
                 customers.add(customer);
@@ -219,6 +224,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return customers;
     }
+
 
     public void deleteCustomer(int customerId) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -232,7 +238,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean updateCustomer(Customer customer) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("customer_name", customer.getCustomerName());
+        values.put("company_name", customer.getCompanyName());
+        values.put("vehicle_no", customer.getVehicleNo());
+        values.put("battery_model", customer.getBatteryModel());
+        values.put("battery_quantity", customer.getBatteryQuantity());
+        // outgoingDate & uniqueCode stay same
 
-
-
+        int rows = db.update("customers", values, "id=?", new String[]{String.valueOf(customer.getId())});
+        return rows > 0;
+    }
 }
+

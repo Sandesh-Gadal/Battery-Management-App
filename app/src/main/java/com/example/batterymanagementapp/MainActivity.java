@@ -119,37 +119,57 @@ public class MainActivity extends AppCompatActivity {
                         Integer.parseInt(batteryQuantity.getText().toString()),
                         comingDate.getText().toString(),
                         null,
-                        null // uniqueCode will be generated in DB
+                        null
                 );
 
-                Customer insertedCustomer = dbHelper.addCustomer(customer);
+                if (isEdit && currentCustomerId != -1) {
+                    // 🔹 Update existing
+                    customer.setId(currentCustomerId);
+                    boolean success = dbHelper.updateCustomer(customer);
 
-                if (insertedCustomer.getId() != -1) {
-                    currentCustomerId = insertedCustomer.getId(); // ✅ now correct
+                    if (success) {
+                        // Update images
+                        dbHelper.deleteImagesForCustomer(currentCustomerId);
+                        for (String path : imagePaths) {
+                            dbHelper.addCustomerImage(currentCustomerId, path);
+                        }
 
-                    // Save images
-                    for (String path : imagePaths) {
-                        dbHelper.addCustomerImage(currentCustomerId, path);
+                        Toast.makeText(this, "Customer updated successfully", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish(); // go back to list
+                    } else {
+                        Toast.makeText(this, "Failed to update customer", Toast.LENGTH_SHORT).show();
                     }
 
-                    logCustomerWithImages(insertedCustomer);
-
-                    // ✅ Pass both ID & unique code to QRActivity
-                    Intent intent = new Intent(MainActivity.this, QRActivity.class);
-                    intent.putExtra("customer_id", insertedCustomer.getId());
-                    intent.putExtra("unique_code", insertedCustomer.getUniqueCode());
-                    startActivity(intent);
-
-                    clearInputs();
-                    imagePaths.clear();
-                    imageAdapter.notifyDataSetChanged();
-
-                    Toast.makeText(this, "Customer added successfully", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Failed to add customer", Toast.LENGTH_SHORT).show();
+                    // 🔹 Insert new
+                    Customer insertedCustomer = dbHelper.addCustomer(customer);
+
+                    if (insertedCustomer.getId() != -1) {
+                        currentCustomerId = insertedCustomer.getId();
+
+                        for (String path : imagePaths) {
+                            dbHelper.addCustomerImage(currentCustomerId, path);
+                        }
+
+                        Intent intent = new Intent(MainActivity.this, QRActivity.class);
+                        intent.putExtra("customer_id", insertedCustomer.getId());
+                        intent.putExtra("unique_code", insertedCustomer.getUniqueCode());
+                        startActivity(intent);
+
+                        clearInputs();
+                        imagePaths.clear();
+                        imageAdapter.notifyDataSetChanged();
+
+                        Toast.makeText(this, "Customer added successfully", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                    } else {
+                        Toast.makeText(this, "Failed to add customer", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+
 
 
 //        searchView = findViewById(R.id.searchView);

@@ -86,7 +86,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
 //            Log.d("id111:","454545:    "+c.getUniqueCode());
             Intent intent = new Intent(activity, CustomerDetailsActivity.class);
 
-
             intent.putExtra("customerId", c.getUniqueCode()); // pass customer ID
             activity.startActivity(intent);
         });
@@ -96,7 +95,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             intent.putExtra("isEdit", true);
             intent.putExtra("unique_code",c.getUniqueCode());
             intent.putExtra("customerId", c.getId()); // pass DB id
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent , 100);
         });
 
 
